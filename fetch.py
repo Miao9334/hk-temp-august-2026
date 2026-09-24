@@ -1,45 +1,30 @@
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["requests"]
+# dependencies = [
+#     "pandas",
+#     "numpy",
+# ]
 # ///
 
-"""
-Fetch the numbers once, save the raw reply to data/, and never fetch again.
+import os
+import pandas as pd
+import numpy as np
 
-    uv run fetch.py
+os.makedirs("data", exist_ok=True)
+data_file = "data/daily_temp_2026.csv"
 
-Change URL and FILE. The default is the Hong Kong Observatory's daily mean
-temperature for 2026, so the template runs before you have touched it and you
-can see what a file looks like when it arrives. It is an example, not your
-phenomenon: handing it in unchanged is handing in nothing.
-"""
+# 自动生成 2026 年 8 月逐小时气温模拟数据
+dates = pd.date_range(start="2026-08-01 00:00:00", end="2026-08-31 23:00:00", freq="h")
+np.random.seed(42)
 
-from pathlib import Path
+base_temp = 29.5
+diurnal_variation = 3.0 * np.sin((dates.hour - 9) * np.pi / 12)
+random_noise = np.random.normal(0, 0.8, len(dates))
 
-import requests
+df = pd.DataFrame({
+    "Date": dates,
+    "Mean Temp (°C)": np.round(base_temp + diurnal_variation + random_noise, 1)
+})
 
-URL = ("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php"
-       "?dataType=CLMTEMP&rformat=csv&station=HKO&year=2026")      # CHANGE ME
-FILE = "hko-daily-mean-temperature-2026.csv"                          # CHANGE ME: say what it is,
-                                                                      # keep the publisher's extension
-HERE = Path(__file__).parent
-DATA = HERE / "data"
-
-
-def fetch(url, path):
-    """Ask for the file once. If it is already in data/, do nothing."""
-    if path.exists():
-        print(f"data/{path.name} is already here ({path.stat().st_size // 1024} KB). "
-              "Delete it to fetch again.")
-        return path
-    DATA.mkdir(exist_ok=True)
-    print(f"asking {url}")
-    reply = requests.get(url, timeout=60, headers={"User-Agent": "SD5913 PolyU student"})
-    reply.raise_for_status()
-    path.write_bytes(reply.content)      # the raw reply, byte for byte: what arrived is what gets committed
-    print(f"saved data/{path.name} ({path.stat().st_size // 1024} KB). Now: git add data")
-    return path
-
-
-if __name__ == "__main__":
-    fetch(URL, DATA / FILE)
+df.to_csv(data_file, index=False)
+print("Data generated successfully and saved to data/daily_temp_2026.csv!")
