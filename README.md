@@ -8,7 +8,7 @@ This project investigates the diurnal hourly temperature fluctuations in Hong Ko
 
 ## The source
 
-The raw weather dataset originates from the Hong Kong Observatory Open Data portal at https://data.gov.hk and is locally maintained at `data/daily_temp_2026.csv`. The file contains exactly 744 rows of observations, where each row represents a single hourly micro-climatic recording for all 31 days in August 2026. The values capture the exact timestamp (`YYYY-MM-DD HH:MM:SS`) and the corresponding mean temperature measured in degrees Celsius (°C).
+The raw weather dataset originates from the Hong Kong Observatory Open Data page at https://data.gov.hk/en-data/dataset/hk-hko-rss-daily-extract and is locally maintained at `data/daily_temp_2026.csv`. The file contains exactly 744 rows of observations, where each row represents a single hourly micro-climatic recording for all 31 days in August 2026. The values capture the exact timestamp (`YYYY-MM-DD HH:MM:SS`) and the corresponding mean temperature measured in degrees Celsius (°C).
 
 ## What the picture shows
 
