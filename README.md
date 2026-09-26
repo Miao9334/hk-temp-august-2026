@@ -1,34 +1,21 @@
-# The phenomenon
+# Hong Kong Diurnal Temperature Fluctuation in August 2026
 
-<!-- This is the SD5913 assignment 2 template. Everything in this file is yours to
-replace, and the check counts words: comments like this one are not words, so
-delete each one as you write. Start with the heading: name the phenomenon.
-
-Then, in this order, at least 150 words in total.
-
-New to folders, paths, or the files here whose names start with a dot? Read
-https://github.com/sd5913/pfad/blob/2026/reference/files.md first. Ten minutes. -->
-
-![what the picture is](out/plot.png)
+![Hong Kong Hourly Temperature Heatmap](out/plot.png)
 
 ## The phenomenon
 
-<!-- What goes up and down, and why you looked at it. -->
+This project investigates the diurnal hourly temperature fluctuations in Hong Kong during August 2026. As a tropical urban metropolis, Hong Kong experiences distinct thermal variations driven by daytime solar radiation and nighttime radiation cooling. Studying these micro-climatic hourly patterns helps us understand urban heat island effects, energy consumption demands for air conditioning, and outdoor human comfort during peak summer months.
 
 ## The source
 
-<!-- A link to the page or endpoint the file came from, and one line on what is in
-the file: how many rows, what a row means, what the units are. -->
+The raw dataset comes from the Hong Kong Observatory Open Data repository at https://data.gov.hk/en-data/dataset/hk-hko-rss-daily-extract and is locally maintained at `data/daily_temp_2026.csv`. The file contains exactly 744 rows of observations, where each row represents a single hourly micro-climatic recording for all 31 days in August 2026. The values capture the exact timestamp (`YYYY-MM-DD HH:MM:SS`) and the corresponding mean temperature measured in degrees Celsius (°C).
 
 ## What the picture shows
 
-<!-- Two or three sentences. Including what it hides: every transformation throws
-something away, and naming what yours threw away is the easiest way to sound like
-you know what you did. -->
+The heatmap illustrates the 24-hour daily temperature grid across all 31 days of August 2026. Higher temperatures around 32°C to 34°C are concentrated during midday between 12:00 and 17:00 in red hues, whereas early mornings remain cooler in deep blue tones. However, by aggregating data into uniform hourly blocks, this visualization hides spatial variations across different districts in Hong Kong as well as short-term weather anomalies like sudden rainstorms.
 
 ## Run it
 
-```
+```bash
 uv run fetch.py
 uv run plot.py
-```
