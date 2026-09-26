@@ -2,46 +2,51 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "pandas",
-#     "matplotlib",
 #     "seaborn",
+#     "matplotlib",
 # ]
 # ///
 
-import os
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib.pyplot as plt
+import os
 
-# 1. Ensure output directory exists
-os.makedirs("out", exist_ok=True)
+# 1. Load data
+input_path = "data/daily_temp_2026.csv"
+if not os.path.exists(input_path):
+    print(f"Error: {input_path} not found. Please run fetch.py first.")
+    exit(1)
 
-# 2. Read generated CSV dataset
-df = pd.read_csv("data/daily_temp_2026.csv")
-df["Date"] = pd.to_datetime(df["Date"])
+df = pd.read_csv(input_path)
 
-# 3. Extract Day and Hour for pivot table
-df["Day"] = df["Date"].dt.day
-df["Hour"] = df["Date"].dt.hour
+# 2. Data processing
+df['Date'] = pd.to_datetime(df['Date'])
+df['Day'] = df['Date'].dt.day
+df['Hour'] = df['Date'].dt.hour
 
-pivot_df = df.pivot(index="Day", columns="Hour", values="Mean Temp (°C)")
+pivoted_data = df.pivot(index='Day', columns='Hour', values='Mean Temp (°C)')
 
-# 4. Create heatmap plot
-plt.figure(figsize=(12, 8))
-sns.heatmap(
-    pivot_df, 
-    cmap="coolwarm", 
-    cbar_kws={'label': 'Mean Temp (°C)'},
-    linewidths=0.5
-)
+# 3. Plotting
+plt.figure(figsize=(16, 10))
 
-plt.title("Hong Kong Hourly Temperature - August 2026")
+# --- 按要求修改这里 ---
+# 将 cmap 参数从发散色标（如 RdBu）改为单向橙红色标（如 OrRd, Reds, YlOrRd）
+# OrRd: 橙色 -> 红色
+# Reds: 浅红 -> 深红
+# rocket (Seaborn default): 深紫色 -> 橙色 (很漂亮)
+
+# 我们选择 OrRd (橙色到红色) 来实现低气温也是橙红色调
+sns.heatmap(pivoted_data, cmap="OrRd", cbar_kws={'label': 'Mean Temp (°C)'},
+            xticklabels=2, yticklabels=2, linewidths=0.05)
+# --------------------
+
+plt.title("Hong Kong Hourly Temperature - August 2026 (Warm Palette)")
 plt.xlabel("Hour of the day")
 plt.ylabel("Day of the month")
 
-# 5. Save output PNG image
+# 4. Save plot
+os.makedirs("out", exist_ok=True)
 output_path = "out/plot.png"
-plt.tight_layout()
-plt.savefig(output_path, dpi=300)
-plt.close()
-
-print(f"Heatmap successfully saved to {output_path}!")
+plt.savefig(output_path, dpi=300, bbox_inches='tight')
+print(f"Updated plot saved to {output_path} with new color palette!")

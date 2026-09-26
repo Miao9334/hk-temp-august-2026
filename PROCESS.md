@@ -2,14 +2,17 @@
 
 ## Tools
 
-I used Gemini to help draft, debug, and optimize the scripts for Assignment 2 (`fetch.py` and `plot.py`).
+I used Gemini to help draft, debug, inspect dataset links, and optimize scripts for Assignment 2 (`fetch.py` and `plot.py`).
 
 ## Kept
 
-- **Offline Raw Data Handling Logic**: I kept the conditional logic in `fetch.py` that verifies whether the dataset already exists locally before attempting any operations, fully adhering to the assignment's offline requirement.
-- **Heatmap Visualization via Seaborn/Matplotlib**: I kept the implementation in `plot.py` using `seaborn.heatmap` and `pandas.pivot` to transform daily and hourly temperature records into a clean 2D grid matrix (Day vs. Hour) for proper visualization.
+- **Open-Meteo Historical Weather API Integration**: I kept the direct API integration in `fetch.py` fetching 2026 August hourly temperature data using Open-Meteo (`https://open-meteo.com`), ensuring a working, non-404 data source link.
+- **Explicit Timezone Handling (`Asia/Hong_Kong`)**: I retained the `timezone=Asia%2FHong_Kong` parameter in the API request URL to ensure all hourly timestamps strictly align with Hong Kong local time.
+- **Warm Color Palette (`OrRd`)**: I kept the updated warm colormap (`OrRd`) in `plot.py` to represent lower temperatures in light orange instead of blue, better capturing the tropical summer atmosphere of Hong Kong.
 
 ## Rejected
 
-- **Online Remote HTTP Fetching**: The initial AI-generated script attempted live HTTP network requests via `requests.get` to remote Open Data URLs, which returned `HTTP 404 Not Found` errors due to missing/non-existent future endpoints. I rejected making online HTTP requests during script execution and switched to the offline file-checking rule.
-- **Single-Line Plot Rendering**: The AI initially produced code for a basic 1D line chart. I rejected this structure because the assignment required visualizing multi-dimensional hourly grid trends, requiring a transposed 2D heatmap matrix instead.
+- **Hardcoded Local/Synthetic Data Generation**: Initially, `fetch.py` relied on synthetic data generation. I rejected this approach after identifying that Open-Meteo provides actual historical weather records, switching to direct API fetching.
+- **Data Source Links with 404 Errors**: I rejected invalid dataset paths from the HK Open Data portal that produced `404 Not Found` errors, replacing them with the valid Open-Meteo endpoint URL.
+- **Default UTC Timezone Data**: The initial API call returned hourly data in UTC, which placed peak temperatures around 04:00-08:00 AM local time. I rejected UTC timestamps and required explicit local HKT conversion.
+- **Diverging Blue-Red Colormap (`RdBu`)**: I rejected the default `RdBu` palette because the cool blue hues incorrectly implied freezing or cold conditions for a tropical 24°C summer morning.
